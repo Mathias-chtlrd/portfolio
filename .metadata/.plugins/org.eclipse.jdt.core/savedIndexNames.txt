@@ -1,0 +1,7 @@
+INDEX VERSION 1.134+C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+3052386988.index
+1904772282.index
+1981064351.index
+147383661.index
+3195366631.index

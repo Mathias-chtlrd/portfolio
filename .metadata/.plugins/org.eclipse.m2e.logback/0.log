@@ -1,0 +1,20 @@
+2025-05-20 17:06:06,489 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is not available. Remote download required.
+2025-05-20 17:06:30,166 [Worker-23: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: fr.iut-tlse3.fr:programmation_SAE_S2-01_2025_GX_Y:0.0.1-SNAPSHOT @ C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\pom.xml.
+2025-05-20 17:06:30,678 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:06:30,834 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\src\test\resources
+2025-05-20 17:06:32,039 [Worker-27: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:06:32,171 [Worker-27: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\src\test\resources
+2025-05-20 17:10:44,614 [Worker-32: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: fr.iut-tlse3.fr:programmation_SAE_S2-01_2025_GX_Y:0.0.1-SNAPSHOT @ C:\Users\anais\git\S201\saev2\pom.xml.
+2025-05-20 17:10:44,651 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:10:44,767 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\git\S201\saev2\src\test\resources
+2025-05-20 17:10:45,065 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:10:45,172 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\git\S201\saev2\src\test\resources
+2025-05-20 17:11:05,373 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:11:05,401 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\git\S201\saev2\src\test\resources
+2025-05-20 17:14:59,626 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:14:59,658 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\git\S201\saev2\src\test\resources
+2025-05-20 17:18:45,253 [Worker-31: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: fr.iut-tlse3.fr:programmation_SAE_S2-01_2025_GX_Y:0.0.1-SNAPSHOT @ C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\pom.xml.
+2025-05-20 17:18:45,609 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:18:45,740 [Worker-31: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\src\test\resources
+2025-05-20 17:18:46,973 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 128 resources from src\main\resources to target\classes
+2025-05-20 17:18:47,099 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\anais\Documents\7-IUT\semestre2\S201\SAE\clone\S201\saev2\src\test\resources
