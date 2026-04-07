@@ -1,0 +1,184 @@
+/* ============================================================
+   style.css – Messagerie Instantanée (R4.A.10)
+   Mise en forme ergonomique, responsive, inspirée de la maquette du sujet
+   ============================================================ */
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background: #f0f2f5;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================
+   Page de connexion
+   ============================================================ */
+#pageConnexion {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#boiteConnexion {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 40px 50px;
+    text-align: center;
+    width: 420px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+#boiteConnexion h1 {
+    font-size: 1.5rem;
+    color: #2e7bcf;
+    margin-bottom: 10px;
+}
+
+#boiteConnexion p {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+#champPseudo {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #aac8f0;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color .2s;
+}
+#champPseudo:focus { border-color: #2e7bcf; }
+
+#btnConnexion {
+    width: 100%;
+    padding: 10px;
+    background: #2e7bcf;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s;
+}
+#btnConnexion:hover { background: #1a5fa8; }
+
+.erreur { color: #c0392b; font-size: 12px; margin-top: 8px; }
+
+/* ============================================================
+   Page de chat
+   ============================================================ */
+#pageChat {
+    width: 700px;
+    max-width: 98vw;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* ── En-tête ── */
+#entete {
+    background: #2e7bcf;
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+#entete h1 { font-size: 1.1rem; }
+#infoUtilisateur { font-size: 12px; opacity: .9; }
+
+/* ── Zone des messages ── */
+#zoneMessages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    background: #fafbfc;
+}
+
+/* Un message individuel */
+.message {
+    background: #fff;
+    border: 1px solid #e4e8ef;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    animation: fadeIn .25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.message .contenu {
+    display: block;
+    font-size: 14px;
+    color: #222;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.message .meta {
+    display: block;
+    font-size: 11px;
+    color: #888;
+}
+
+/* ── Zone de saisie ── */
+#zoneSaisie {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid #dde3ec;
+    background: #fff;
+    flex-shrink: 0;
+    gap: 10px;
+}
+
+#message {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #aac8f0;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+}
+#message:focus { border-color: #2e7bcf; }
+
+#btnEnvoyer {
+    padding: 10px 20px;
+    background: #2e7bcf;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s;
+}
+#btnEnvoyer:hover { background: #1a5fa8; }
+
+/* ── Scrollbar esthétique (navigateurs webkit) ── */
+#zoneMessages::-webkit-scrollbar { width: 6px; }
+#zoneMessages::-webkit-scrollbar-track { background: #f0f2f5; }
+#zoneMessages::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 3px; }

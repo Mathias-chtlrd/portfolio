@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Messagerie Instantanée</title>
+
+    <!-- Feuille de style externe -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- jQuery (CDN Google) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- ======================================================
+     Étape 1 : saisie du pseudo (affiché une seule fois)
+     Exercice 6 bonus – page de connexion légère
+     ====================================================== -->
+<div id="pageConnexion">
+    <div id="boiteConnexion">
+        <h1>💬 Messagerie Ajax</h1>
+        <p>Entrez votre pseudo pour rejoindre le chat :</p>
+        <input type="text" id="champPseudo" placeholder="Votre pseudo" maxlength="50" autofocus>
+        <button id="btnConnexion">Entrer dans le chat</button>
+        <p id="erreurPseudo" class="erreur"></p>
+    </div>
+</div>
+
+<!-- ======================================================
+     Étape 2 : interface principale du chat
+     Masquée jusqu'à la connexion
+     ====================================================== -->
+<div id="pageChat" style="display:none;">
+
+    <header id="entete">
+        <h1>💬 Messagerie Ajax</h1>
+        <span id="infoUtilisateur">Connecté en tant que : <strong id="pseudoAffiche"></strong></span>
+    </header>
+
+    <!-- Zone d'affichage des messages -->
+    <div id="zoneMessages"></div>
+
+    <!-- Zone de saisie -->
+    <div id="zoneSaisie">
+        <input type="text"
+               id="message"
+               placeholder="Saisissez votre message…"
+               maxlength="500"
+               autocomplete="off">
+        <button id="btnEnvoyer">Envoyer</button>
+    </div>
+
+</div><!-- /#pageChat -->
+
+
+<script>
+$(document).ready(function () {
+
+    /* ────────────────────────────────────────────────────
+       Variables globales
+    ──────────────────────────────────────────────────── */
+    let pseudoUtilisateur = '';     // Pseudo saisi une seule fois
+    let intervalId        = null;   // Référence au setInterval
+
+    /* ────────────────────────────────────────────────────
+       Connexion : l'utilisateur saisit son pseudo
+    ──────────────────────────────────────────────────── */
+    function seConnecter() {
+        let pseudo = $('#champPseudo').val().trim();
+
+        if (pseudo === '') {
+            $('#erreurPseudo').text('Veuillez entrer un pseudo.');
+            return;
+        }
+
+        pseudoUtilisateur = pseudo;
+
+        // Afficher le pseudo dans l'entête
+        $('#pseudoAffiche').text(pseudoUtilisateur);
+
+        // Passer de la page de connexion à la page de chat
+        $('#pageConnexion').hide();
+        $('#pageChat').show();
+        $('#message').focus();
+
+        // Premier chargement immédiat puis rafraîchissement toutes les 2 s
+        chargerMessages();
+        intervalId = setInterval(chargerMessages, 2000);
+    }
+
+    // Connexion via le bouton
+    $('#btnConnexion').click(function () {
+        seConnecter();
+    });
+
+    // Connexion via la touche Entrée sur le champ pseudo
+    $('#champPseudo').keyup(function (e) {
+        if (e.which === 13) {   // Code ASCII 13 = Entrée
+            seConnecter();
+        }
+    });
+
+    /* ────────────────────────────────────────────────────
+       Exercice 3 : récupération et affichage des messages
+       Gestion des doublons : on ne réinsère que les messages
+       dont l'id (data-id) n'est pas encore dans #zoneMessages
+    ──────────────────────────────────────────────────── */
+    function chargerMessages() {
+        $.get('recuperer.php', function (html) {
+
+            // Parser le HTML reçu pour itérer sur chaque .message
+            let nouveaux = $(html).filter('.message').add($(html).find('.message'));
+
+            // Utiliser un Set pour être précis
+            let parser   = $($.parseHTML(html));
+
+            parser.each(function () {
+                let el = $(this);
+                if (!el.hasClass('message')) return;
+
+                let id = el.attr('data-id');
+
+                // Insérer uniquement si ce message n'est pas déjà affiché
+                if ($('#zoneMessages .message[data-id="' + id + '"]').length === 0) {
+                    $('#zoneMessages').append(el);
+                }
+            });
+
+            // Faire défiler vers le bas automatiquement
+            $('#zoneMessages').scrollTop($('#zoneMessages')[0].scrollHeight);
+        });
+    }
+
+    /* ────────────────────────────────────────────────────
+       Exercice 2 : enregistrement d'un message
+    ──────────────────────────────────────────────────── */
+    function envoyerMessage() {
+        let contenu = $('#message').val().trim();
+
+        // Vérifications
+        if (pseudoUtilisateur === '' || contenu === '') return;
+
+        $.post('enregistrer.php', {
+            auteur:  pseudoUtilisateur,
+            contenu: contenu
+        }, function (reponse) {
+            if (reponse === 'OK') {
+                // Exercice 5 : vider la zone de saisie après envoi
+                $('#message').val('');
+                // Recharger immédiatement pour voir son propre message
+                chargerMessages();
+            }
+        });
+    }
+
+    // Envoi via le bouton
+    $('#btnEnvoyer').click(function () {
+        envoyerMessage();
+    });
+
+    // Exercice 5 : envoi via la touche Entrée (code ASCII 13)
+    $('#message').keyup(function (e) {
+        if (e.which === 13) {
+            envoyerMessage();
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
