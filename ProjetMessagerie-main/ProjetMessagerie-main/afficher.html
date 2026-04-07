@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R4.A.10 – Messagerie Instantanée</title>
+
+    <!-- jQuery (CDN) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        /* =====================================================
+           Variables et reset général
+        ===================================================== */
+        :root {
+            --bleu-iut:   #2d6a9f;
+            --bleu-clair: #4a90c4;
+            --bleu-pale:  #ddeeff;
+            --gris-bg:    #f4f6f9;
+            --gris-bord:  #ccd6e0;
+            --blanc:      #ffffff;
+            --texte:      #2c3e50;
+            --sous-texte: #7f8c8d;
+            --rouge-err:  #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gris-bg);
+            color: var(--texte);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        /* =====================================================
+           Conteneur principal
+        ===================================================== */
+        .chat-wrapper {
+            width: 100%;
+            max-width: 680px;
+            background: var(--blanc);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* =====================================================
+           En-tête
+        ===================================================== */
+        .chat-header {
+            background: var(--bleu-iut);
+            color: var(--blanc);
+            padding: 14px 20px;
+        }
+
+        .chat-header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .chat-header p {
+            font-size: .78rem;
+            opacity: .8;
+            margin-top: 2px;
+        }
+
+        /* =====================================================
+           Zone pseudo
+        ===================================================== */
+        .pseudo-zone {
+            background: var(--bleu-pale);
+            border-bottom: 1px solid var(--gris-bord);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pseudo-zone label {
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--bleu-iut);
+            white-space: nowrap;
+        }
+
+        #pseudo {
+            flex: 1;
+            border: 1px solid var(--gris-bord);
+            border-radius: 4px;
+            padding: 7px 12px;
+            font-size: .9rem;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        #pseudo:focus {
+            border-color: var(--bleu-clair);
+        }
+
+        /* =====================================================
+           Zone des messages
+        ===================================================== */
+        #zone-messages {
+            flex: 1;
+            min-height: 350px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: var(--blanc);
+        }
+
+        /* Message individuel */
+        .message-item {
+            background: var(--gris-bg);
+            border-left: 3px solid var(--bleu-clair);
+            border-radius: 0 6px 6px 0;
+            padding: 10px 14px;
+            animation: fadeIn .3s ease;
+        }
+
+        .message-item.moi {
+            background: var(--bleu-pale);
+            border-left-color: var(--bleu-iut);
+            align-self: flex-end;
+            border-radius: 6px 0 0 6px;
+            border-left: none;
+            border-right: 3px solid var(--bleu-iut);
+        }
+
+        .message-contenu {
+            font-size: .95rem;
+            color: var(--texte);
+            word-break: break-word;
+        }
+
+        .message-meta {
+            font-size: .75rem;
+            color: var(--sous-texte);
+            margin-top: 5px;
+        }
+
+        .message-meta .auteur-nom {
+            font-weight: 600;
+            color: var(--bleu-iut);
+        }
+
+        /* Message de statut (vide, erreur) */
+        .msg-statut {
+            text-align: center;
+            color: var(--sous-texte);
+            font-size: .85rem;
+            font-style: italic;
+            margin: auto;
+        }
+
+        .msg-statut.erreur {
+            color: var(--rouge-err);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =====================================================
+           Zone de saisie
+        ===================================================== */
+        .saisie-zone {
+            border-top: 1px solid var(--gris-bord);
+            padding: 12px 16px;
+            display: flex;
+            gap: 10px;
+            background: var(--blanc);
+        }
+
+        #message-input {
+            flex: 1;
+            border: 1px solid var(--gris-bord);
+            border-radius: 4px;
+            padding: 9px 14px;
+            font-size: .92rem;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+            transition: border-color .2s;
+        }
+
+        #message-input:focus {
+            border-color: var(--bleu-clair);
+        }
+
+        #btn-envoyer {
+            background: var(--bleu-iut);
+            color: var(--blanc);
+            border: none;
+            border-radius: 4px;
+            padding: 9px 22px;
+            font-size: .92rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background .2s;
+            white-space: nowrap;
+        }
+
+        #btn-envoyer:hover {
+            background: var(--bleu-clair);
+        }
+
+        #btn-envoyer:active {
+            transform: scale(.97);
+        }
+
+        /* Indicateur de rafraîchissement */
+        .refresh-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--bleu-iut), var(--bleu-clair));
+            transform-origin: left;
+            animation: refresh 2s linear infinite;
+        }
+
+        @keyframes refresh {
+            0%   { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-wrapper">
+
+    <!-- En-tête -->
+    <div class="chat-header">
+        <h1>💬 Messagerie Instantanée</h1>
+        <p>R4.A.10 – Compléments Web | IUT Informatique BUT2</p>
+    </div>
+
+    <!-- Zone pseudo (Exercice 4) -->
+    <div class="pseudo-zone">
+        <label for="pseudo">Mon pseudo :</label>
+        <input type="text" id="pseudo" placeholder="Entrez votre pseudo…" maxlength="50">
+    </div>
+
+    <!-- Barre de rafraîchissement (indicateur visuel) -->
+    <div class="refresh-bar" id="refresh-bar"></div>
+
+    <!-- Zone d'affichage des messages (Exercice 3 & 4) -->
+    <div id="zone-messages">
+        <p class="msg-statut" id="msg-statut">Chargement des messages…</p>
+    </div>
+
+    <!-- Zone de saisie (Exercice 4 & 5) -->
+    <div class="saisie-zone">
+        <input
+            type="text"
+            id="message-input"
+            placeholder="Saisissez votre message…"
+            maxlength="500"
+            autocomplete="off"
+        >
+        <button id="btn-envoyer">Envoyer</button>
+    </div>
+
+</div><!-- /.chat-wrapper -->
+
+
+<script>
+$(document).ready(function () {
+
+    // =========================================================
+    //  Variables globales
+    // =========================================================
+    var dernierIdConnu = 0;   // dernier id reçu, évite les doublons (Exercice 4)
+
+    // =========================================================
+    //  Exercice 3 & 4 : Récupération périodique des messages
+    //  - Requête Ajax toutes les 2 secondes vers recuperer.php
+    //  - Pas de doublon : on compare les id avec dernierIdConnu
+    //  - Pas de suppression des anciens messages
+    // =========================================================
+    function recupererMessages() {
+        $.ajax({
+            url    : 'recuperer.php',
+            type   : 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (!data.succes) {
+                    afficherStatut('Erreur serveur : ' + data.erreur, true);
+                    return;
+                }
+
+                var messages = data.messages;
+
+                if (messages.length === 0 && dernierIdConnu === 0) {
+                    afficherStatut('Aucun message pour l\'instant. Soyez le premier !', false);
+                    return;
+                }
+
+                // Supprime le message de statut si on a du contenu
+                $('#msg-statut').remove();
+
+                var pseudoActuel = $('#pseudo').val().trim();
+                var nouveauxMessages = false;
+
+                $.each(messages, function (index, msg) {
+                    var id = parseInt(msg.id);
+
+                    // Ignorer les messages déjà affichés (anti-doublon)
+                    if (id <= dernierIdConnu) return;
+
+                    dernierIdConnu = id;
+                    nouveauxMessages = true;
+
+                    // Classe CSS spéciale si c'est notre propre message
+                    var classMoi = (pseudoActuel !== '' && msg.auteur === pseudoActuel) ? ' moi' : '';
+
+                    // Formatage de l'horodatage
+                    var dateObj  = new Date(msg.horodatage.replace(' ', 'T'));
+                    var maintenant = new Date();
+                    var diffMin  = Math.round((maintenant - dateObj) / 60000);
+                    var tempsStr = '';
+
+                    if (diffMin < 1) {
+                        tempsStr = 'à l\'instant';
+                    } else if (diffMin === 1) {
+                        tempsStr = 'il y a 1 min';
+                    } else if (diffMin < 60) {
+                        tempsStr = 'il y a ' + diffMin + ' min';
+                    } else {
+                        // Affichage de l'heure complète si > 1h
+                        tempsStr = 'à ' + dateObj.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+                    }
+
+                    // Construction du HTML du message
+                    var html = '<div class="message-item' + classMoi + '" id="msg-' + id + '">'
+                             +   '<div class="message-contenu">' + escapeHtml(msg.contenu) + '</div>'
+                             +   '<div class="message-meta">'
+                             +     '<span class="auteur-nom">' + escapeHtml(msg.auteur) + '</span>'
+                             +     ' | ' + tempsStr
+                             +   '</div>'
+                             + '</div>';
+
+                    $('#zone-messages').append(html);
+                });
+
+                // Auto-scroll vers le bas si nouveaux messages
+                if (nouveauxMessages) {
+                    var zone = document.getElementById('zone-messages');
+                    zone.scrollTop = zone.scrollHeight;
+                }
+            },
+            error: function () {
+                afficherStatut('Impossible de joindre le serveur.', true);
+            }
+        });
+    }
+
+    // =========================================================
+    //  Exercice 2 & 4 : Envoi d'un message via Ajax
+    // =========================================================
+    function envoyerMessage() {
+        var auteur  = $('#pseudo').val().trim();
+        var contenu = $('#message-input').val().trim();
+
+        // Validation côté client
+        if (auteur === '') {
+            alert('Veuillez saisir votre pseudo avant d\'envoyer un message.');
+            $('#pseudo').focus();
+            return;
+        }
+        if (contenu === '') {
+            return; // on n'envoie pas de message vide
+        }
+
+        $.ajax({
+            url     : 'enregistrer.php',
+            type    : 'POST',
+            dataType: 'json',
+            data    : {
+                auteur : auteur,
+                contenu: contenu
+            },
+            success: function (data) {
+                if (!data.succes) {
+                    alert('Erreur : ' + data.erreur);
+                    return;
+                }
+
+                // Exercice 5 : vider la zone de saisie après envoi
+                $('#message-input').val('');
+
+                // Rafraîchissement immédiat après envoi
+                recupererMessages();
+            },
+            error: function () {
+                alert('Erreur de connexion au serveur.');
+            }
+        });
+    }
+
+    // =========================================================
+    //  Exercice 4 : Bouton Envoyer (click)
+    // =========================================================
+    $('#btn-envoyer').on('click', function () {
+        envoyerMessage();
+    });
+
+    // =========================================================
+    //  Exercice 5 : Envoi avec la touche Entrée (keyup, code 13)
+    // =========================================================
+    $('#message-input').on('keyup', function (e) {
+        if (e.which === 13) {   // 13 = code ASCII de ENTER
+            envoyerMessage();
+        }
+    });
+
+    // =========================================================
+    //  Exercice 4 : Rafraîchissement automatique toutes les 2s
+    //  Utilise setInterval comme préconisé dans le sujet
+    // =========================================================
+    recupererMessages();                       // premier appel immédiat
+    setInterval(recupererMessages, 2000);      // puis toutes les 2 secondes
+
+    // =========================================================
+    //  Utilitaires
+    // =========================================================
+
+    // Affiche un message de statut dans la zone messages
+    function afficherStatut(texte, estErreur) {
+        var classe = estErreur ? 'msg-statut erreur' : 'msg-statut';
+        if ($('#msg-statut').length === 0) {
+            $('#zone-messages').append('<p class="' + classe + '" id="msg-statut">' + texte + '</p>');
+        } else {
+            $('#msg-statut').attr('class', classe).text(texte);
+        }
+    }
+
+    // Échappe les caractères HTML pour éviter les injections XSS
+    function escapeHtml(str) {
+        return $('<div>').text(str).html();
+    }
+
+});
+</script>
+
+</body>
+</html>
